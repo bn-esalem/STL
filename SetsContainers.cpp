@@ -1,5 +1,6 @@
 #include <set>
 #include <iostream>
+#include <string>
 
 class Person{
     friend std::ostream &operator<<(std::ostream &os, const Person &p);
@@ -88,14 +89,32 @@ void test2(){
 }
 
 void test3(){
+    std::cout << "\nTest3 =============================================" << std::endl;
 
+    std::set<std::string> s {"A", "B", "C"};
+    display(s);
+
+    auto result = s.insert("D");  // i will get std::pair with 2 attrib first is iterator and second is bool
+    display(s);
+
+    std::cout << std::boolalpha;
+    std::cout << "First: " << *(result.first) << std::endl;
+    std::cout << "second: " << result.second << std::endl; // it will be true because it is new added not duplicated
+    std::cout << std::endl;
+
+    result = s.insert("A");
+    display(s);
+
+    std::cout << std::boolalpha;
+    std::cout << "First: " << *(result.first) << std::endl;
+    std::cout << "second: " << result.second << std::endl; // it will be false because it is already exist and duplicated
 }
 
 int main (){
 
     test1();
     test2();
-    tes
+    test3();
 
     return 0;
 }
