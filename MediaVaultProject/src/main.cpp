@@ -1,10 +1,14 @@
+
+#include "Book.h"
 #include <iostream>
-//#include "Book.h"
-#include "Date.h"
 
 int main() {
-    Date date(15, 8, 2021);
-    std::cout << "Date: " << date << std::endl;
+    Date d(19, 5, 2026);
+    Book b(101, "Clean Code", d, "Robert Martin", 464);
 
+   // std::cout << b << "\n";         // uses Item operator<<
+    std::cout << b.info() << "\n";
+
+  
     return 0;
-}
+}   
