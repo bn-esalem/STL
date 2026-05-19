@@ -1,8 +1,14 @@
-
 # Build outputs
+build/
+cmake-build-*/
+
+# Compiled files
 *.o
 *.out
 *.exe
-build/
-cmake-build-*/
+
+# Linux executables (your compiled binary)
 MediaVaultProject/MediaVaultProject
+
+# VS Code (optional)
+.vscode/
