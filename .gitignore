@@ -1,0 +1,8 @@
+
+# Build outputs
+*.o
+*.out
+*.exe
+build/
+cmake-build-*/
+MediaVaultProject/MediaVaultProject
