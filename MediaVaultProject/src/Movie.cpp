@@ -5,19 +5,19 @@
 #include <string>
 #include <iostream>
 
-Movie::Movie(int id, std::string title, const Date &added, std::string director, int duration, Status status)
-    : Item(id, std::move(title), added, status), m_director(std::move(director)), m_duration(duration) {}
+Movie::Movie(int id, std::string title, const Date &added, std::string director, int duration)
+    : Item(id, std::move(title), added), m_director(std::move(director)), m_duration(duration) {}
 
 std::string Movie::info() const {
     
     std::ostringstream oss;
 
-    oss << "[Movie] " << "ID: " << get_id()
-        << " \"" << get_title() << "\""
-        << " | Added: " << get_added_date()
-        << " | Status: " << status_to_string(get_status())
-        << " | Director: " << m_director
-        << " | Duration: " << m_duration << " minutes";
+    oss << "[Movie] " << "\nID: " << get_id()
+        << "\nTitle: "<< " \"" << get_title() << "\""
+        << "\nAdded: " << get_added_date()
+        << "\nStatus: " << status_to_string(get_status())
+        << "\nDirector: " << m_director
+        << "\nDuration: " << m_duration << " minutes";
 
     return oss.str();
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <cstddef>
 
 void Library::add_item(std::unique_ptr<Item> item) {
     if(!item) {
@@ -65,4 +66,12 @@ void Library::list_all_items() const {
     for (const auto& item : m_items) {
         std::cout << *item << "\n"; // Using overloaded operator<< for Item
     }
+}
+
+bool Library::empty() const{
+    return m_items.empty();
+}
+
+std::size_t Library::size() const{
+    return m_items.size();
 }

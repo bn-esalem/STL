@@ -20,6 +20,7 @@ public:
     
     int get_id() const;
     const std::string& get_title() const;
+    // Return a const reference to the added date to avoid unnecessary copying
     const Date& get_added_date() const;
     
     Status get_status() const;

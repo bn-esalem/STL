@@ -4,9 +4,10 @@
 #include <string>
 #include <iostream>
 
-Game::Game(int id, std::string title, const Date &added, Platform platform, Status status)
-    : Item(id, std::move(title), added, status), m_platform(platform) {}
+Game::Game(int id, std::string title, const Date &added, Platform platform)
+    : Item(id, std::move(title), added), m_platform(platform) {}
 
+// Helper function to convert Platform enum to string for display purposes
 std::string platform_to_string(Platform platform) {
     switch (platform) {
         case Platform::PC: return "PC";
@@ -22,11 +23,11 @@ std::string Game::info() const {
     
     std::ostringstream oss;
 
-    oss << "[Game] " << "ID: " << get_id()
-        << " \"" << get_title() << "\""
-        << " | Added: " << get_added_date()
-        << " | Status: " << status_to_string(get_status())
-        << " | Platform: " << platform_to_string(m_platform);
+    oss << "[Game] " << "\nID: " << get_id()
+        << "\nTitle: "<< " \"" << get_title() << "\""
+        << "\nAdded: " << get_added_date()
+        << "\nStatus: " << status_to_string(get_status())
+        << "\nPlatform: " << platform_to_string(m_platform);
 
     return oss.str();
 } 

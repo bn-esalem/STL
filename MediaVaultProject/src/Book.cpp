@@ -12,12 +12,12 @@ std::string Book::info() const {
     
     std::ostringstream oss;
 
-    oss << "[Book] " << "ID: " << get_id()
-        << " \"" << get_title() << "\""
-        << " | Added: " << get_added_date()
-        << " | Status: " << status_to_string(get_status())
-        << " | Author: " << m_author
-        << " | Pages: " << m_pages;
+    oss << "[Book] " <<"\n" << "ID: " << get_id()
+        << "\nTitle: " << "\"" << get_title() << "\""
+        << "\nAdded: " << get_added_date()
+        << "\nStatus: " << status_to_string(get_status())
+        << "\nAuthor: " << m_author
+        << "\naPages: " << m_pages;
 
     return oss.str();
 }

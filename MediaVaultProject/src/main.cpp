@@ -1,5 +1,7 @@
 
 #include "Book.h"
+#include "Movie.h"
+#include "Game.h"
 #include "Library.h"
 #include "Exceptions.h"
 
@@ -11,7 +13,7 @@
 
 void display_menu() {
     std::cout << "Media Vault Menu:\n";
-    std::cout << "A. Add Item\n";
+    std::cout << "A. Add Item (Book / Movie / Game)\n";
     std::cout << "R. Remove Item\n";
     std::cout << "S. Search Item\n";
     std::cout << "D. Display All Items\n";
@@ -72,7 +74,26 @@ std::string get_string_input(const std::string& prompt) {
     }
 }
 
+Platform get_platform_input() {
 
+    std::cout << "Choose platform:\n";
+    std::cout << "1. PC\n";
+    std::cout << "2. PlayStation\n";
+    std::cout << "3. Xbox\n";
+    std::cout << "4. Nintendo Switch\n";
+    std::cout << "5. Mobile\n";
+    
+    int platform_choice = get_int_input("Platform: ");
+    switch (platform_choice) {
+        case 1: return Platform::PC;
+        case 2: return Platform::PlayStation;
+        case 3: return Platform::Xbox;
+        case 4: return Platform::NintendoSwitch;
+        case 5: return Platform::Mobile;
+        default:
+            std::cout << "Invalid choice. Try again.\n";
+    }
+}
 
 Date read_date_for_now() {
     return Date(20, 5, 2026);
@@ -92,19 +113,41 @@ int main() {
             
             switch(choice) {
                 case('A'): {
+                    char type_choice = get_menu_choice("Add (B)ook, (M)ovie, (G)ame: ");
+
                     int id = get_int_input("ID: ");
                     std::string title = get_string_input("Title: ");
-                    std::string author = get_string_input("Author: ");
-                    int pages = get_int_input("Pages: ");
                     Date added = read_date_for_now();
-                    auto book = std::make_unique<Book>(id, title, added, author, pages);
-                    library.add_item(std::move(book));
-
-                    std::cout << "Item added successfully.\n";
+                    
+                    if(type_choice == 'B'){
+                        std::string author = get_string_input("Author: ");
+                        int pages = get_int_input("Pages: ");
+                        auto book = std::make_unique<Book>(id, title, added, author, pages);
+                        library.add_item(std::move(book));
+                        std::cout << "Item added successfully.\n";
+                    }
+                    else if(type_choice == 'M'){
+                        std::string director = get_string_input("Director: ");
+                        int duration = get_int_input("Duration: ");
+                        auto movie = std::make_unique<Movie>(id, title, added, director, duration);
+                        library.add_item(std::move(movie));
+                        std::cout << "Movie added successfully.\n";
+                    }
+                    else if(type_choice == 'G'){
+                        Platform platform = get_platform_input();
+                        auto game = std::make_unique<Game>(id, title, added, platform);
+                        library.add_item(std::move(game));
+                        std::cout << "Game added successfully.\n";
+                    }
                     break;
                 }
 
                 case('R'): {
+                    if (library.empty()) {
+                        std::cout << "Library is empty.\n";
+                        break;
+                    }
+
                     int remove_id = get_int_input("Enter the ID of the item to remove: ");
                     library.remove_item(remove_id);
                     std::cout << "Item removed successfully.\n";    
@@ -112,10 +155,15 @@ int main() {
                 }
 
                 case('S'): {
+                    if (library.empty()) {
+                        std::cout << "Library is empty.\n";
+                        break;
+                    }
+
                     int search_id = get_int_input("Enter the ID of the item to search: ");
                     const Item* item = library.find_item(search_id);
                     if (item) {
-                        std::cout << "Item found: " << *item<< "\n";
+                        std::cout << "\nItem found:\n" << *item << "\n";
                     } else {
                         std::cout << "Item with ID " << search_id << " not found.\n";
                     }

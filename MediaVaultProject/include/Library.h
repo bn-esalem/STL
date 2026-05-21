@@ -4,6 +4,7 @@
 #include "Item.h"
 #include <vector>
 #include <memory>
+#include <cstddef>
 #include "Exceptions.h"
 
 class Library {
@@ -19,6 +20,10 @@ public:
     const Item* find_item(int id) const; // Overloaded for const correctness    
     
     void list_all_items() const;
+
+    bool empty() const;
+
+    std::size_t size() const;
 };
 
 #endif
