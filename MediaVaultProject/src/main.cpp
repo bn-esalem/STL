@@ -15,7 +15,10 @@ void display_menu() {
     std::cout << "Media Vault Menu:\n";
     std::cout << "A. Add Item (Book / Movie / Game)\n";
     std::cout << "R. Remove Item\n";
-    std::cout << "S. Search Item\n";
+    std::cout << "S. Search Item by ID\n";
+    std::cout << "T. Search Item by Title\n";
+    std::cout << "C. Checkout Item\n";
+    std::cout << "U. Return Item\n";
     std::cout << "D. Display All Items\n";
     std::cout << "Q. Quit\n";
 }
@@ -76,22 +79,24 @@ std::string get_string_input(const std::string& prompt) {
 
 Platform get_platform_input() {
 
-    std::cout << "Choose platform:\n";
-    std::cout << "1. PC\n";
-    std::cout << "2. PlayStation\n";
-    std::cout << "3. Xbox\n";
-    std::cout << "4. Nintendo Switch\n";
-    std::cout << "5. Mobile\n";
+    while(true){
+        std::cout << "Choose platform:\n"
+                  << "1. PC\n"
+                  << "2. PlayStation\n"
+                  << "3. Xbox\n"
+                  << "4. Nintendo Switch\n"
+                  << "5. Mobile\n";
     
-    int platform_choice = get_int_input("Platform: ");
-    switch (platform_choice) {
-        case 1: return Platform::PC;
-        case 2: return Platform::PlayStation;
-        case 3: return Platform::Xbox;
-        case 4: return Platform::NintendoSwitch;
-        case 5: return Platform::Mobile;
-        default:
-            std::cout << "Invalid choice. Try again.\n";
+        int platform_choice = get_int_input("Platform: ");
+        switch (platform_choice) {
+            case 1: return Platform::PC;
+            case 2: return Platform::PlayStation;
+            case 3: return Platform::Xbox;
+            case 4: return Platform::NintendoSwitch;
+            case 5: return Platform::Mobile;
+            default:
+                std::cout << "Invalid choice. Try again.\n";
+        }
     }
 }
 
@@ -114,6 +119,10 @@ int main() {
             switch(choice) {
                 case('A'): {
                     char type_choice = get_menu_choice("Add (B)ook, (M)ovie, (G)ame: ");
+                    if(type_choice != 'B' && type_choice != 'M' && type_choice != 'G'){
+                        std::cout << "Invalid type choice. Please enter B, M, or G." << std::endl;
+                        break;
+                    }
 
                     int id = get_int_input("ID: ");
                     std::string title = get_string_input("Title: ");
@@ -169,6 +178,39 @@ int main() {
                     }
                     break;
                 }
+                case('T'):{
+                    if(library.empty()){
+                        std::cout << "Library is empty.\n";
+                        break;
+                    }
+
+                    std::string keyword = get_string_input("Enter the Title keyword: ");
+                    library.search_by_title(keyword);
+                    break;
+                }
+                case('C'):{
+                    if(library.empty()){
+                        std::cout << "Library is empty.\n";
+                        break;
+                    }
+
+                    int checkedout_id = get_int_input("Enter the ID of item to checkout: ");
+                    library.checkout_item(checkedout_id);
+                    std::cout << "Item checked out successfully.\n";
+                    break;
+                }
+                case('U'):{
+                    if(library.empty()){
+                        std::cout << "Library is empty.";
+                        break;
+                    }
+
+                    int return_id = get_int_input("Enter the ID of item to return: ");
+                    library.return_item(return_id);
+                    std::cout << "Item returned successfuly.\n";
+                    break;
+                }
+
                 case('D'):
                     library.list_all_items();
                     break;
@@ -185,10 +227,13 @@ int main() {
         catch (const NotFoundError& e) {
             std::cerr << e.what() << "\n";
         }
+        catch (const InvalidOperationError& e) {
+            std::cerr << e.what() << "\n";
+        }
         catch (const LibraryError& e) {
             std::cerr << "Library error: " << e.what() << "\n";
         }
-        catch(const std::exception& e) {
+        catch (const std::exception& e) {
             std::cerr << "Error: " << e.what() << '\n';
         }
     }

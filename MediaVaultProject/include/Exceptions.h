@@ -16,4 +16,10 @@ public:
         : LibraryError("Not found: " + msg) {}
 };
 
+class InvalidOperationError : public LibraryError{
+public:
+    explicit InvalidOperationError(const std::string &msg)
+        : LibraryError("Invalid operation: " + msg) {}
+};
+
 #endif

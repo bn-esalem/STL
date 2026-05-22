@@ -5,6 +5,14 @@
 #include <utility>
 #include <cstddef>
 
+// small helper function
+static std::string string_to_lower(std::string str){
+    for(char &c: str){
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    }
+    return str;
+}
+
 void Library::add_item(std::unique_ptr<Item> item) {
     if(!item) {
         throw LibraryError("Cannot add a null item to the library.");
@@ -58,6 +66,58 @@ const Item* Library::find_item(int id) const {
     }
 }
 
+void Library::search_by_title(std::string &keyword){
+
+    if(keyword.empty()){
+        std::cout << "Keyword is empty!\n";
+        return;
+    }
+    
+    const std::string word = string_to_lower(keyword);
+    bool found = false;
+
+    for(const auto &item: m_items){
+        const std::string title = string_to_lower(item->get_title());
+        if(title.find(word) != std::string::npos){
+            std::cout << *item << std::endl;
+            found = true;
+        }
+    }
+
+    if(!found){
+        std::cout << "No matches." << std::endl;
+    } 
+}
+
+void Library::checkout_item(int id){
+    Item *item = find_item(id);
+
+    if(!item){
+        throw NotFoundError("Item with ID: " + std::to_string(id) + " not found.");
+    }
+
+    if(item->get_status() != Status::Available){
+        throw InvalidOperationError("Item with ID: " + std::to_string(id) + " is not available for checkout.");
+    }
+
+    item->set_status(Status::CheckedOut);
+
+}
+
+void Library::return_item(int id){
+    Item *item = find_item(id);
+
+    if(!item){
+        throw NotFoundError("Item with ID: " + std::to_string(id) + " not found.");
+    }
+
+    if(item->get_status() != Status::CheckedOut){
+        throw InvalidOperationError("Item with ID: " + std::to_string(id) + " is not currently checked out.");
+    }
+
+    item->set_status(Status::Available);
+}
+
 void Library::list_all_items() const {
     if (m_items.empty()) {
         std::cout << "No items in the library.\n";
@@ -65,6 +125,7 @@ void Library::list_all_items() const {
     }
     for (const auto& item : m_items) {
         std::cout << *item << "\n"; // Using overloaded operator<< for Item
+        std::cout << "-----------------------\n";
     }
 }
 

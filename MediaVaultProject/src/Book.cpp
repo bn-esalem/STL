@@ -17,7 +17,7 @@ std::string Book::info() const {
         << "\nAdded: " << get_added_date()
         << "\nStatus: " << status_to_string(get_status())
         << "\nAuthor: " << m_author
-        << "\naPages: " << m_pages;
+        << "\nPages: " << m_pages;
 
     return oss.str();
 }
