@@ -15,6 +15,8 @@ public:
     
     std::string info() const override;
     Type get_type() const override;
+    std::string serialize() const override;
+    
 };
 
 #endif

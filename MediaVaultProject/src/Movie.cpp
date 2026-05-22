@@ -25,3 +25,18 @@ std::string Movie::info() const {
 Type Movie::get_type() const {
     return Type::Movie;
 }
+
+std::string Movie::serialize() const{
+    
+    std::ostringstream oss;
+    
+    oss << "Movie,"
+        << get_id() << ","
+        << get_title() << ","
+        << get_added_date().date_to_string() << ","
+        << status_to_string(get_status()) << ","
+        << m_director << ","
+        << m_duration;
+    
+    return oss.str();
+}

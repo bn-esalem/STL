@@ -17,6 +17,8 @@ public:
     int get_month() const;
     int get_year() const;
 
+    std::string date_to_string() const;
+
     ~Date () = default;    
 };
 #endif

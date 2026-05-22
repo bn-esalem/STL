@@ -11,12 +11,19 @@ int Date::get_month() const {return m_month;}
 
 int Date::get_year() const {return m_year;}
 
+std::string Date::date_to_string() const{
+    
+    std::ostringstream oss;
+    
+    oss << std::setfill('0') << std::setw(4) 
+        << get_year() << "-" << std::setw(2) 
+        << get_month() << "-" << std::setw(2) 
+        << get_day();
+    
+    return oss.str();
+}
+
 std::ostream& operator<<(std::ostream& os, const Date& date) {
     
-    os << std::setfill('0') << std::setw(4) 
-        << date.get_year() << "-" << std::setw(2) 
-        << date.get_month() << "-" << std::setw(2) 
-        << date.get_day() << std::setfill(' ');
-    
-    return os;
+    return os << date.date_to_string();
 }

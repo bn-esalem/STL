@@ -35,3 +35,17 @@ std::string Game::info() const {
 Type Game::get_type() const {
     return Type::Game;
 }
+
+std::string Game::serialize() const{
+
+    std::ostringstream oss;
+    
+    oss << "Game,"
+        << get_id() << ","
+        << get_title() << ","
+        << get_added_date().date_to_string() << ","
+        << status_to_string(get_status()) << ","
+        << platform_to_string(m_platform);
+    
+    return oss.str();
+}

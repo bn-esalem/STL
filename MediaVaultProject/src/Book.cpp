@@ -25,3 +25,18 @@ std::string Book::info() const {
 Type Book::get_type() const {
     return Type::Book;
 }
+
+std::string Book::serialize() const{
+    
+    std::ostringstream oss;
+    
+    oss << "Book,"
+        << get_id() << ","
+        << get_title() << ","
+        << get_added_date().date_to_string() << ","
+        << status_to_string(get_status()) << ","
+        << m_author << ","
+        << m_pages;
+    
+    return oss.str();
+}
