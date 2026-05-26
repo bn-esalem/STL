@@ -18,6 +18,7 @@ public:
     int get_year() const;
 
     std::string date_to_string() const;
+    static Date date_from_string(const std::string &str);
 
     ~Date () = default;    
 };

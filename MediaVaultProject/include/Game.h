@@ -15,6 +15,7 @@ enum class Platform {
 
 //helper function to convert Platform enum to string for display purposes
 std::string platform_to_string(Platform platform);
+Platform platform_from_string(const std::string &str);
 
 class Game : public Item {
 private:
@@ -27,4 +28,5 @@ public:
     Type get_type() const override;
     std::string serialize() const override;
 };
+
 #endif

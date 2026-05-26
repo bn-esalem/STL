@@ -4,15 +4,16 @@
 #include "Game.h"
 #include "Library.h"
 #include "Exceptions.h"
+#include "Utils.h"
 
 #include <iostream>
 #include <memory>
 #include <string>
-#include <limits>
-#include <cctype>
+
 
 void display_menu() {
-    std::cout << "Media Vault Menu:\n";
+    std::cout << "\nMedia Vault Menu:\n";
+    std::cout << "----------------------------\n";
     std::cout << "A. Add Item (Book / Movie / Game)\n";
     std::cout << "R. Remove Item\n";
     std::cout << "S. Search Item by ID\n";
@@ -23,93 +24,18 @@ void display_menu() {
     std::cout << "Q. Quit\n";
 }
 
-char get_menu_choice(const std::string& prompt) {
-    while (true) {
-        std::string line;
-        std::cout << prompt;
-
-        if (!std::getline(std::cin >> std::ws, line)) {
-            throw std::runtime_error("Input stream closed (EOF).");
-        }
-        if (!line.empty()) {
-            unsigned char c = static_cast<unsigned char>(line[0]);
-            return static_cast<char>(std::toupper(c)); // Convert to uppercase for case-insensitive comparison
-        }
-        
-        std::cout << "Input cannot be empty. Please try again.\n";
-            
-    }
-}
-
- // Helper function to get validated integer input from the user
-int get_int_input(const std::string& prompt) {
-    
-    int value{};
-    while (true){
-        
-        std::cout << prompt;
-        if (std::cin >> value) {
-            return value; // Valid integer input
-        } else {
-            std::cout << "Invalid input. Please enter a valid integer.\n";
-            std::cin.clear(); // Clear the error state
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-        }
-    }
-}
-
-std::string get_string_input(const std::string& prompt) {
-    
-    std::string value;
-    while (true)
-    {
-        std::cout << prompt;
-        //std::getline(std::cin >> std::ws, value); // Read a line of input
-        
-        if(!std::getline(std::cin >> std::ws, value)) {
-            throw std::runtime_error("Input stream closed (EOF).");
-        }
-        else if(!value.empty()) {
-            return value;
-        }else{
-            std::cout << "Input cannot be empty. Please try again.\n";
-        }
-    }
-}
-
-Platform get_platform_input() {
-
-    while(true){
-        std::cout << "Choose platform:\n"
-                  << "1. PC\n"
-                  << "2. PlayStation\n"
-                  << "3. Xbox\n"
-                  << "4. Nintendo Switch\n"
-                  << "5. Mobile\n";
-    
-        int platform_choice = get_int_input("Platform: ");
-        switch (platform_choice) {
-            case 1: return Platform::PC;
-            case 2: return Platform::PlayStation;
-            case 3: return Platform::Xbox;
-            case 4: return Platform::NintendoSwitch;
-            case 5: return Platform::Mobile;
-            default:
-                std::cout << "Invalid choice. Try again.\n";
-        }
-    }
-}
-
-Date read_date_for_now() {
-    return Date(20, 5, 2026);
-}
-
-
 int main() {
     
     Library library;
+
+    try{
+        library.load_from_file("data/MediaVault.txt");
+    }
+    catch(const std::exception &e){
+        std::cerr << "Error loading file: " << e.what() << "\n";
+    }
     
-    while(true){
+    while (true){
         display_menu();
         char choice {};
 
@@ -126,23 +52,23 @@ int main() {
 
                     int id = get_int_input("ID: ");
                     std::string title = get_string_input("Title: ");
-                    Date added = read_date_for_now();
+                    Date added = read_date_input();
                     
-                    if(type_choice == 'B'){
+                    if (type_choice == 'B'){
                         std::string author = get_string_input("Author: ");
                         int pages = get_int_input("Pages: ");
                         auto book = std::make_unique<Book>(id, title, added, author, pages);
                         library.add_item(std::move(book));
-                        std::cout << "Item added successfully.\n";
+                        std::cout << "Book added successfully.\n";
                     }
-                    else if(type_choice == 'M'){
+                    else if (type_choice == 'M'){
                         std::string director = get_string_input("Director: ");
                         int duration = get_int_input("Duration: ");
                         auto movie = std::make_unique<Movie>(id, title, added, director, duration);
                         library.add_item(std::move(movie));
                         std::cout << "Movie added successfully.\n";
                     }
-                    else if(type_choice == 'G'){
+                    else if (type_choice == 'G'){
                         Platform platform = get_platform_input();
                         auto game = std::make_unique<Game>(id, title, added, platform);
                         library.add_item(std::move(game));
@@ -179,7 +105,7 @@ int main() {
                     break;
                 }
                 case('T'):{
-                    if(library.empty()){
+                    if (library.empty()){
                         std::cout << "Library is empty.\n";
                         break;
                     }
@@ -189,7 +115,7 @@ int main() {
                     break;
                 }
                 case('C'):{
-                    if(library.empty()){
+                    if (library.empty()){
                         std::cout << "Library is empty.\n";
                         break;
                     }
@@ -200,14 +126,14 @@ int main() {
                     break;
                 }
                 case('U'):{
-                    if(library.empty()){
-                        std::cout << "Library is empty.";
+                    if (library.empty()){
+                        std::cout << "Library is empty.\n";
                         break;
                     }
 
                     int return_id = get_int_input("Enter the ID of item to return: ");
                     library.return_item(return_id);
-                    std::cout << "Item returned successfuly.\n";
+                    std::cout << "Item returned successfully.\n";
                     break;
                 }
 
@@ -216,7 +142,8 @@ int main() {
                     break;
 
                 case('Q'):
-                    std::cout << "Quitting...\n";
+                    library.save_to_file("data/MediaVault.txt");
+                    std::cout << "Data saved. Quitting...\n";
                     return 0;
                 default:
                     std::cout << "Invalid choice. Please try again.\n";

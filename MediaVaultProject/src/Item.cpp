@@ -34,6 +34,21 @@ std::string status_to_string(Status status) {
     }
 }
 
+Status status_from_string(const std::string &str){
+
+    if(str == "Available"){
+        return Status::Available;
+    }
+    else if(str == "CheckedOut"){
+        return Status::CheckedOut;
+    }
+    else if(str == "Lost"){
+        return Status::Lost;
+    }
+
+    throw std::runtime_error("Unknown status: "+str);
+}
+
 std::string type_to_string(Type type) {
     switch (type) {
         case Type::Book:

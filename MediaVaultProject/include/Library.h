@@ -4,7 +4,7 @@
 #include "Item.h"
 #include <vector>
 #include <memory>
-#include <cstddef>
+#include <cstddef>  // for std::size_t
 #include "Exceptions.h"
 
 class Library {
@@ -18,7 +18,7 @@ public:
     Item* find_item(int id); // Returns a pointer to the item with the given ID, or nullptr if not found
     const Item* find_item(int id) const; // Overloaded for const correctness    
     
-    void search_by_title(std::string &keyword);
+    void search_by_title(const std::string &keyword) const;
 
     void checkout_item(int id);
 
@@ -29,6 +29,9 @@ public:
     bool empty() const;
 
     std::size_t size() const;
+
+    void save_to_file(const std::string &file_name) const; // before quitting
+    void load_from_file(const std::string &file_name); // at program start
 };
 
 #endif

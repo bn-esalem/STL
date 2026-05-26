@@ -13,7 +13,7 @@ std::string Movie::info() const {
     std::ostringstream oss;
 
     oss << "[Movie] " << "\nID: " << get_id()
-        << "\nTitle: "<< " \"" << get_title() << "\""
+        << "\nTitle: "<< "\"" << get_title() << "\""
         << "\nAdded: " << get_added_date()
         << "\nStatus: " << status_to_string(get_status())
         << "\nDirector: " << m_director

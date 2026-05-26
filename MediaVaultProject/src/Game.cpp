@@ -19,12 +19,32 @@ std::string platform_to_string(Platform platform) {
     }
 }
 
+Platform platform_from_string(const std::string &str){
+    if (str == "PC"){
+        return Platform::PC;
+    }
+    else if (str == "PlayStation") {
+        return Platform::PlayStation;
+    }
+    else if (str == "Xbox") {
+        return Platform::Xbox;
+    }
+    else if (str == "NintendoSwitch") {
+        return Platform::NintendoSwitch;
+    }
+    else if (str == "Mobile") {
+        return Platform::Mobile;
+    }
+
+    throw std::runtime_error("Unknown platform: " + str);
+}
+
 std::string Game::info() const {
     
     std::ostringstream oss;
 
     oss << "[Game] " << "\nID: " << get_id()
-        << "\nTitle: "<< " \"" << get_title() << "\""
+        << "\nTitle: "<< "\"" << get_title() << "\""
         << "\nAdded: " << get_added_date()
         << "\nStatus: " << status_to_string(get_status())
         << "\nPlatform: " << platform_to_string(m_platform);

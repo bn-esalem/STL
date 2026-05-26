@@ -29,6 +29,7 @@ public:
     // Pure virtual functions for polymorphism
     virtual std::string info() const = 0; // Pure virtual function for polymorphism
     virtual Type get_type() const = 0; // Pure virtual function to get the type of item 
+    virtual std::string serialize() const = 0; //Pure virtual function for file saving
    
     virtual ~Item() = default;
 };
@@ -38,6 +39,7 @@ std::ostream& operator<<(std::ostream& os, const Item &item);
 
 // Helper functions to convert enums to strings for display purposes
 std::string status_to_string(Status status);
+Status status_from_string(const std::string &str);
 
 std::string type_to_string(Type type);
 
