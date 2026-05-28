@@ -43,8 +43,9 @@ std::string Game::info() const {
     
     std::ostringstream oss;
 
-    oss << "[Game] " << "\nID: " << get_id()
-        << "\nTitle: "<< "\"" << get_title() << "\""
+    oss << "[Game]\n" 
+        << "ID: " << get_id()
+        << "\nTitle: \"" << get_title() << "\""
         << "\nAdded: " << get_added_date()
         << "\nStatus: " << status_to_string(get_status())
         << "\nPlatform: " << platform_to_string(m_platform);

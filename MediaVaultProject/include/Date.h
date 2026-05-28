@@ -20,6 +20,9 @@ public:
     std::string date_to_string() const;
     static Date date_from_string(const std::string &str);
 
+    bool operator==(const Date &rhs) const;
+    bool operator<(const Date &rhs) const;
+
     ~Date () = default;    
 };
 #endif

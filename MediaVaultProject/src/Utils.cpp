@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "Library.h"
 
 #include <limits>
 #include <iostream>
@@ -93,4 +94,58 @@ Date read_date_input() {
             std::cout << e.what() << "\n";
         }
     }
+}
+
+void display_menu() {
+    std::cout << "\nMedia Vault Menu:\n";
+    std::cout << "----------------------------\n";
+    std::cout << "A. Add Item (Book / Movie / Game)\n";
+    std::cout << "R. Remove Item\n";
+    std::cout << "S. Search Item by ID\n";
+    std::cout << "T. Search Item by Title\n";
+    std::cout << "C. Checkout Item\n";
+    std::cout << "U. Return Item\n";
+    std::cout << "D. Display All Items\n";
+    std::cout << "O. Sort Items\n";
+    std::cout << "P. Print summary\n";
+    std::cout << "F. Filter Items\n";
+    std::cout << "Q. Quit\n";
+    std::cout << "----------------------------\n";
+}
+
+void display_sort_menu() {
+    std::cout << "\nSort Options:\n";
+    std::cout << "----------------------------\n";
+    std::cout << "1. Title (Ascending)\n";
+    std::cout << "2. Title (Descending)\n";
+    std::cout << "3. Title Case-Insensitive (Ascending)\n";
+    std::cout << "4. Title Case-Insensitive (Descending)\n";
+    std::cout << "5. ID (Ascending)\n";
+    std::cout << "6. ID (Descending)\n";
+    std::cout << "7. Date (Ascending)\n";
+    std::cout << "8. Date (Descending)\n";
+}
+
+void display_filter_menu(){
+    std::cout << "\nFilter Options:\n";
+    std::cout << "----------------------------\n";
+    std::cout << "1. Show Available Items\n";
+    std::cout << "2. Show CheckedOut Items\n";
+    std::cout << "3. Show Lost Items\n";
+    std::cout << "4. Show Books\n";
+    std::cout << "5. Show Movies\n";
+    std::cout << "6. Show Games\n";  
+}
+
+bool library_not_empty(const Library &library){
+    if (library.empty()){
+        std::cout << "Library is empty.\n";
+        return false;
+    }
+    return true;
+}
+
+void print_section_header(const std::string &title){
+    std::cout << "\n" << title << "\n";
+    std::cout << "----------------------------\n";
 }

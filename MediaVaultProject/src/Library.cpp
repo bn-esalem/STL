@@ -151,6 +151,39 @@ bool Library::empty() const{
     return m_items.empty();
 }
 
+void Library::sort_by_title(bool ascending){
+    std::sort(m_items.begin(), m_items.end(),
+    [ascending](const std::unique_ptr<Item> &a, const std::unique_ptr<Item> &b){
+        return ascending ? (a->get_title() < b->get_title()) : (a->get_title() > b->get_title());
+    });
+}
+
+void Library::sort_by_title_case_insensitive(bool ascending){
+    std::sort(m_items.begin(), m_items.end(), [ascending](const std::unique_ptr<Item> &a, const std::unique_ptr<Item> &b){
+        std::string title_a = string_to_lower(a->get_title());
+        std::string title_b = string_to_lower(b->get_title());
+
+        return ascending ? (title_a < title_b)
+                         : (title_a > title_b);
+    });
+}
+
+void Library::sort_by_id(bool ascending){
+    std::sort(m_items.begin(), m_items.end(), [ascending]
+    (const std::unique_ptr<Item> &a, const std::unique_ptr<Item> &b){
+        return (ascending ? (a->get_id() < b->get_id())
+                          : (a->get_id() > b->get_id()));
+    });
+}
+
+void Library::sort_by_date(bool ascending){
+    std::sort(m_items.begin(), m_items.end(), [ascending]
+(const std::unique_ptr<Item> &a, const std::unique_ptr<Item> &b){
+    return (ascending ? (a->get_added_date() < b->get_added_date()) 
+                      : (b->get_added_date() < a->get_added_date()) );
+});
+}
+
 std::size_t Library::size() const{
     return m_items.size();
 }
@@ -245,5 +278,92 @@ void Library::load_from_file(const std::string &file_name){
 
 }
 
+void Library::print_summary() const{
+    if (m_items.empty()){
+        std::cout << "Library is empty.\n";
+        return;
+    }
+
+    size_t books{0};
+    size_t movies{0};
+    size_t games{0};
+
+    size_t available{0};
+    size_t checked_out{0};
+    size_t lost{0};
+
+    for (const auto &item: m_items){
+        
+        switch(item->get_type()){
+            case Type::Book:
+                ++books;
+                break;
+            case Type::Movie:
+                ++movies;
+                break;
+            case Type::Game:
+                ++games;
+                break;
+        }
+
+        switch (item->get_status()){
+            case Status::Available:
+                ++available;
+                break;
+            case Status::CheckedOut:
+                ++checked_out;
+                break;
+            case Status::Lost:
+                ++lost;
+                break;   
+        }
+    }
+
+    std::cout << "\nLibrary Summary\n";
+    std::cout << "--------------------\n";
+    std::cout << "Total items: " << m_items.size() << "\n";
+    std::cout << "Books: " << books << "\n";
+    std::cout << "Movies: " << movies << "\n";
+    std::cout << "Games: " << games << "\n";
+    std::cout << "Available: " << available << "\n";
+    std::cout << "CheckedOut: " << checked_out << "\n";
+    std::cout << "Lost: " << lost << "\n";
+}
+
+void Library::filter_by_status(Status status) const{
+    if(m_items.empty()){
+        std::cout << "Library is empty.\n";
+        return;
+    }
+    bool found = false;
+    for (const auto &item: m_items){
+        if(item->get_status() == status){
+            std::cout << *item << "\n";
+            std::cout << "-------------------------------\n";
+            found = true;
+        }
+    }
+    if (!found){
+        std::cout << "No items match the selected status.\n";
+    }
+}
+
+void Library::filter_by_type(Type type) const{
+    if (m_items.empty()){
+        std::cout << "Library is empty.\n";
+        return;
+    }
+    bool found = false;
+    for (const auto &item: m_items){
+        if(item->get_type() == type){
+            std::cout << *item << "\n";
+            std::cout << "-----------------------\n";
+            found = true;
+        }
+    }
+    if (!found){
+        std::cout << "No items match the selected type.\n";
+    }
+}
 
 

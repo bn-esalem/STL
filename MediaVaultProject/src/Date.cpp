@@ -77,3 +77,19 @@ std::ostream& operator<<(std::ostream& os, const Date& date){
     return os << date.date_to_string();
 }
 
+bool Date::operator==(const Date& rhs) const {
+    return get_year() == rhs.get_year() &&
+           get_month() == rhs.get_month() &&
+           get_day() == rhs.get_day();
+}
+
+bool Date::operator<(const Date &rhs) const{
+    if (m_year != rhs.m_year){
+        return m_year < rhs.m_year;
+    }
+    if (m_month != rhs.m_month){
+        return m_month < rhs.m_month;
+    }
+    return m_day < rhs.m_day;
+}
+
