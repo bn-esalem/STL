@@ -141,9 +141,9 @@ MediaVaultProject/
 ``
 
 Main Components
+
 Date
 Responsible for:
-
 storing day, month, and year
 formatting a date to string
 parsing a date from string
@@ -153,14 +153,11 @@ comparing dates for sorting
 Item
 Abstract base class for all media types.
 Shared fields:
-
 ID
 title
 added date
 status
-
 Shared behavior:
-
 info()
 serialize()
 get_type()
@@ -168,21 +165,18 @@ get_type()
 Book
 Derived from Item.
 Additional fields:
-
 author
 pages
 
 Movie
 Derived from Item.
 Additional fields:
-
 director
 duration
 
 Game
 Derived from Item.
 Additional fields:
-
 platform
 
 Library
@@ -200,7 +194,6 @@ save / load
 
 Utils
 Contains helper functions for:
-
 safe integer input
 safe string input
 menu input
@@ -210,25 +203,21 @@ menu display helpers
 
 Exceptions
 Contains custom exception types:
-
 LibraryError
 NotFoundError
 InvalidOperationError
 
 Build Instructions
 Requirements
-
 C++17 compatible compiler
 Linux / Ubuntu (or compatible environment)
 g++
 
 Build
 Run the following command from the project root:
-
 g++ -std=c++17 -Wall -Wextra -pedantic -pthread -Iinclude src/*.cpp -o MediaVaultProject
 
 Run
-
 ./MediaVaultProject
 
 Usage
@@ -250,39 +239,27 @@ Q. Quit
 ----------------------------
 
 Menu Options
-
 A → Add a new item
 Choose the item type (Book, Movie, or Game) and enter the required details.
 
 R → Remove an item by ID
-
 S → Search for an item by ID
-
-T → Search for items by title keyword
-Search is case-insensitive.
-
-C → Checkout an item
-Only available items can be checked out.
-
-U → Return an item
-Only checked-out items can be returned.
-
+T → Search for items by title keyword (Search is case-insensitive.)
+C → Checkout an item (Only available items can be checked out.)
+U → Return an item (Only checked-out items can be returned.)
 D → Display all items
 
 O → Sort items
 Sorting options:
-
 Title (Ascending / Descending)
 Title Case-Insensitive (Ascending / Descending)
 ID (Ascending / Descending)
 Date (Ascending / Descending)
 
-P → Print summary
-Shows totals and status/type statistics.
+P → Print summary (Shows totals and status/type statistics.)
 
 F → Filter items
 Filtering options:
-
 Available items
 CheckedOut items
 Lost items
@@ -290,8 +267,7 @@ Books
 Movies
 Games
 
-Q → Quit
-Saves the current data before exiting.
+Q → Quit (Saves the current data before exiting.)
 
 Data Persistence
 The application stores data in:
@@ -312,7 +288,6 @@ Example:
 2026-05-20
 ``
 The program validates:
-
 correct format
 valid month range
 valid day range
@@ -320,19 +295,16 @@ correct number of days for each month
 leap years
 
 Examples:
-
 2024-02-29 ✅ valid
 2025-02-29 ❌ invalid
 2026-04-31 ❌ invalid
 2026-13-01 ❌ invalid
 
 IDs
-
 item IDs must be unique
 duplicate IDs are rejected
 
 Text Input
-
 strings cannot be empty
 
 Status Values
@@ -343,7 +315,6 @@ CheckedOut
 Lost
 
 Status changes happen through:
-
 checkout
 return
 loading previously saved items
@@ -385,12 +356,9 @@ Pages: 123
 
 Design Notes
 Some important design choices in this project:
-
 Item is an abstract base class
 Library stores items using:
-
 std::vector<std::unique_ptr<Item>>
-
 to support polymorphism and clear ownership
 custom exceptions are used for clearer error handling
 save/load uses a CSV-style text format
@@ -400,7 +368,6 @@ autosave runs in the background using a dedicated thread
 What I Learned
 
 This project helped me practice how to build and improve a larger C++ application step by step, including:
-
 structuring a multi-file C++ project
 applying inheritance and polymorphism in practice
 managing ownership using smart pointers
@@ -411,5 +378,4 @@ handling errors with custom exceptions
 experimenting with multithreading in a practical, controlled way
 
 ## Author
-
 Created as a personal C++ learning project.
