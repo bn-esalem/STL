@@ -28,6 +28,10 @@ Search by title keyword
 Sort by title (asc/desc)
 Checkout / Return items
 Save/load to a CSV file
+input validation
+filtering
+date parsing and validation
+multithreading
 
 What the project does (exact behavior)
 You build a command-line application that manages a collection of media items:
@@ -78,3 +82,199 @@ When exiting, save items to a file (e.g. CSV):
 On start, load existing file if available.
 
 So your program “remembers” items between runs.
+
+MediaVaultProject/
+├── include/
+│   ├── Date.h
+│   ├── Item.h
+│   ├── Book.h
+│   ├── Movie.h
+│   ├── Game.h
+│   ├── Library.h
+│   ├── Exceptions.h
+│   ├── Utils.h
+│
+├── src/
+│   ├── Date.cpp
+│   ├── Item.cpp
+│   ├── Book.cpp
+│   ├── Movie.cpp
+│   ├── Game.cpp
+│   ├── Library.cpp
+│   ├── Utils.cpp
+│   ├── main.cpp
+│
+├── data/
+│   └── MediaVault.txt
+
+Date
+Represents a date.
+Responsibilities:
+
+store day, month, year
+convert date to string
+parse date from string
+validate date format and calendar correctness
+compare dates for sorting
+
+Features:
+
+to_string()
+date_from_string(...)
+operator<<
+operator<
+
+Item (abstract base class)
+Base class for all item types.
+Common fields:
+
+id
+title
+added date
+status
+
+Common behaviour:
+
+info() → display output
+serialize() → save to file
+get_type()
+
+This class is abstract, so it is never created directly.
+
+Book
+Derived from Item.
+Extra fields:
+
+author
+pages
+
+Movie
+Derived from Item.
+Extra fields:
+
+director
+duration
+
+Game
+Derived from Item.
+Extra fields:
+
+platform
+
+Uses:
+
+Platform enum
+
+Library
+Main manager class.
+It stores all items in: std::vector<std::unique_ptr<Item>>
+
+Responsibilities:
+
+add item
+remove item
+search by ID
+search by title
+sort by (title, id, date) asc & desc
+filter by (status, type)
+checkout / return
+print summary
+save to file
+load from file
+
+Utils
+Contains input and small UI helper functions.
+Responsibilities:
+
+safe integer input
+safe string input
+menu choice input
+platform input
+date input
+small display helpers
+
+Exceptions
+Contains custom exceptions.
+Current exception types:
+
+LibraryError
+NotFoundError
+InvalidOperationError
+
+Input validation
+
+✅ integer validation
+✅ non-empty string validation
+✅ real date input
+✅ date format validation
+✅ full calendar validation
+
+correct month range
+correct day range
+leap year handling
+
+Important technical concepts this project already uses
+OOP
+
+encapsulation
+inheritance
+polymorphism
+abstract base classes
+
+Memory management
+
+std::unique_ptr
+ownership transfer with std::move
+
+STL
+
+std::vector
+std::find_if
+std::remove_if
+std::sort
+
+Lambdas
+Used for:
+
+searching
+sorting
+filtering logic
+
+Exceptions
+Used for:
+
+invalid operations
+duplicate IDs
+not found errors
+invalid input
+
+File I/O
+
+std::ifstream
+std::ofstream
+serialization / deserialization
+
+Operator overloading
+
+operator<<
+Date::operator<
+
+Current menu scope
+Your application currently supports this menu flow:
+
+A → Add item
+R → Remove item
+S → Search item by ID
+T → Search item by title
+C → Checkout item
+U → Return item
+D → Display all items
+O → Sort items
+P → Print summary
+F → Filter items
+Q → Save and quit
+
+MediaVault is a C++17 CLI media manager for Books, Movies, and Games
+that supports add/search/filter/sort/checkout/save/load, 
+and is used to practice OOP, STL, exceptions, file I/O, 
+and a small multithreading feature.
