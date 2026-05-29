@@ -135,12 +135,6 @@ MediaVaultProject/
 │
 └── README.md
 
-
-✅ Fixed version of YOUR README (clean & professional)
-Here is your corrected version (same content, properly formatted):
-
-Markdown# MediaVaultMediaVault is a **C++17 command-line media management application** for managing a collection of **Books**, **Movies**, and **Games**.This project was built as a practical learning project to apply and strengthen important C++ concepts in a realistic multi-file application.---## Project SummaryMediaVault is a feature-rich C++17 CLI application that allows users to manage different types of media items, including Books, Movies, and Games. It supports adding, removing, searching, sorting, filtering, checkout/return workflows, and file persistence through save/load functionality.The project was developed to practice core C++ programming concepts such as:- object-oriented programming- inheritance and polymorphism- smart pointers- STL containers and algorithms- exception handling- file I/O- serialization and deserialization- date parsing and validation- multithreading with background autosave---## Features### Item Management- Add new items:  - Book  - Movie  - Game- Remove items by ID- Display all stored items### Searching- Search items by ID- Search items by title keyword (case-insensitive)### Sorting- Sort by title (ascending / descending)- Sort by title case-insensitive (ascending / descending)- Sort by ID (ascending / descending)- Sort by date (ascending / descending)### Filtering- Filter by status:  - Available  - CheckedOut  - Lost- Filter by type:  - Book  - Movie  - Game### Status Management- Checkout items- Return items### Statistics- Print summary information:  - total number of items  - number of books, movies, and games  - number of available, checked-out, and lost items### Persistence- Save all items to file- Load items automatically when the program starts### Validation- Validated integer and string input- Date input validation using `YYYY-MM-DD`- Full calendar validation including leap years### Multithreading- Background autosave thread- Mutex-protected shared data access- Clean thread shutdown on exit---## Concepts Practiced- multi-file project structure- classes and objects- inheritance- polymorphism- abstract base classes- smart pointers (`std::unique_ptr`)- enums- operator overloading- STL containers- STL algorithms- lambdas- custom exceptions- file I/O- string parsing- data validation- date comparison and validation- multithreading with:  - `std::thread`  - `std::mutex`  - `std::lock_guard`  - `std::atomic`---## Project Structure```textMediaVaultProject/├── include/│   ├── Date.h│   ├── Item.h│   ├── Book.h│   ├── Movie.h│   ├── Game.h│   ├── Library.h│   ├── Exceptions.h│   ├── Utils.h│├── src/│   ├── Date.cpp│   ├── Item.cpp│   ├── Book.cpp│   ├── Movie.cpp│   ├── Game.cpp│   ├── Library.cpp│   ├── Utils.cpp│   ├── main.cpp│├── data/│   └── MediaVault.txt│└── README.mdShow less
-
 Build Instructions
 Requirements
 
@@ -149,8 +143,10 @@ g++
 
 Build
 g++ -std=c++17 -Wall -Wextra -pedantic -pthread -Iinclude src/*.cpp -o MediaVaultProject
+
 Run
 ./MediaVaultProject
+
 Usage
 Media Vault Menu
 ----------------------------
@@ -166,46 +162,23 @@ P. Print summary
 F. Filter Items
 Q. Quit
 ----------------------------
-Data Persistence
-Data is saved in:
-data/MediaVault.txt
-``
-
-
-✅ Fixed version of YOUR README (clean & professional)
-Here is your corrected version (same content, properly formatted):
-
-Markdown# MediaVaultMediaVault is a **C++17 command-line media management application** for managing a collection of **Books**, **Movies**, and **Games**.This project was built as a practical learning project to apply and strengthen important C++ concepts in a realistic multi-file application.---## Project SummaryMediaVault is a feature-rich C++17 CLI application that allows users to manage different types of media items, including Books, Movies, and Games. It supports adding, removing, searching, sorting, filtering, checkout/return workflows, and file persistence through save/load functionality.The project was developed to practice core C++ programming concepts such as:- object-oriented programming- inheritance and polymorphism- smart pointers- STL containers and algorithms- exception handling- file I/O- serialization and deserialization- date parsing and validation- multithreading with background autosave---## Features### Item Management- Add new items:  - Book  - Movie  - Game- Remove items by ID- Display all stored items### Searching- Search items by ID- Search items by title keyword (case-insensitive)### Sorting- Sort by title (ascending / descending)- Sort by title case-insensitive (ascending / descending)- Sort by ID (ascending / descending)- Sort by date (ascending / descending)### Filtering- Filter by status:  - Available  - CheckedOut  - Lost- Filter by type:  - Book  - Movie  - Game### Status Management- Checkout items- Return items### Statistics- Print summary information:  - total number of items  - number of books, movies, and games  - number of available, checked-out, and lost items### Persistence- Save all items to file- Load items automatically when the program starts### Validation- Validated integer and string input- Date input validation using `YYYY-MM-DD`- Full calendar validation including leap years### Multithreading- Background autosave thread- Mutex-protected shared data access- Clean thread shutdown on exit---## Concepts Practiced- multi-file project structure- classes and objects- inheritance- polymorphism- abstract base classes- smart pointers (`std::unique_ptr`)- enums- operator overloading- STL containers- STL algorithms- lambdas- custom exceptions- file I/O- string parsing- data validation- date comparison and validation- multithreading with:  - `std::thread`  - `std::mutex`  - `std::lock_guard`  - `std::atomic`---## Project Structure```textMediaVaultProject/├── include/│   ├── Date.h│   ├── Item.h│   ├── Book.h│   ├── Movie.h│   ├── Game.h│   ├── Library.h│   ├── Exceptions.h│   ├── Utils.h│├── src/│   ├── Date.cpp│   ├── Item.cpp│   ├── Book.cpp│   ├── Movie.cpp│   ├── Game.cpp│   ├── Library.cpp│   ├── Utils.cpp│   ├── main.cpp│├── data/│   └── MediaVault.txt│└── README.mdShow less
-
-Build Instructions
-Requirements
-
-C++17
-g++
-
-Build
-Shellg++ -std=c++17 -Wall -Wextra -pedantic -pthread -Iinclude src/*.cpp -o MediaVaultProjectShow more lines
-Run
-Shell./MediaVaultProjectShow more lines
-
-Usage
-Plain TextMedia Vault Menu----------------------------A. Add Item (Book / Movie / Game)R. Remove ItemS. Search Item by IDT. Search Item by TitleC. Checkout ItemU. Return ItemD. Display All ItemsO. Sort ItemsP. Print summaryF. Filter ItemsQ. Quit----------------------------Show less
 
 Data Persistence
-Data is saved in:
+Data is stored in:
 data/MediaVault.txt
-``
+
 Multithreading / Autosave
 
 Background autosave thread saves data periodically
 Mutex protects shared access to the library
 Atomic flag ensures clean shutdown
+
 Example Session
 Enter your choice: A
 Add (B)ook: B
 ID: 1
 Title: Hello World
 Book added successfully.
+
 Author
 Created as a personal C++ learning project.
-
