@@ -1,9 +1,9 @@
 #include "Date.h"
-#include <iostream>
 #include <string>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
+
 
 Date::Date(int day, int month, int year) 
     : m_day(day), m_month(month), m_year(year) {}
@@ -14,12 +14,12 @@ int Date::get_month() const {return m_month;}
 
 int Date::get_year() const {return m_year;}
 
-static bool is_leap_year(int year){
+bool Date::is_leap_year(int year){
     return ((year % 4 == 0 && year % 100 != 0) ||
             (year % 400 == 0));
 }
 
-static int days_in_month(int month, int year){
+int Date::days_in_month(int month, int year){
     switch (month){
         case 1: return 31;
         case 2: return is_leap_year(year) ? 29 : 28;
@@ -38,7 +38,8 @@ static int days_in_month(int month, int year){
     }
 }
 
-std::string Date::date_to_string() const{
+// to convert Date object into text representation for easy saving to a file or serialize into text
+string Date::date_to_string() const{
     
     std::ostringstream oss;
     
@@ -50,6 +51,7 @@ std::string Date::date_to_string() const{
     return oss.str();
 }
 
+// the opposite to take the string and convert it to Date object for easy loading from file or deserialize from text
 Date Date::date_from_string(const std::string &str){
 
     std::istringstream iss(str);
@@ -64,7 +66,7 @@ Date Date::date_from_string(const std::string &str){
     }
 
     int max_day = days_in_month(month, year);
-    if (day < 1 || day > 31){
+    if (day < 1 || day > max_day){
         throw std::runtime_error("Invalid day for the given month/year. Maximum day is " + std::to_string(max_day) + ".");
     }
 

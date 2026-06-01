@@ -1,37 +1,7 @@
 Project: MediaVault (CLI Library / Media Manager)
 A command‑line app to manage a collection of media items (Books, Movies, Games).
 You can add / list / search / sort / check-out / return / save / load items.
-It covers:
-✅ Program structure (multi-file)
-✅ Variables/constants
-✅ Arrays + vectors (std::array, std::vector)
-✅ Statements/operators + program flow (menus, loops, switch)
-✅ Characters/strings
-✅ Functions
-✅ Pointers/references (raw non-owning pointer + references)
-✅ Classes/objects
-✅ Operator overloading (Date, stream <<)
-✅ Inheritance + polymorphism (abstract base class + virtual functions)
-✅ Smart pointers (std::unique_ptr)
-✅ Exception handling (custom exceptions)
-✅ I/O + streams (fstream, stringstream)
-✅ STL (algorithms, iterators, unordered_map, optional sorting/filtering)
-✅ Lambda expressions (filters, comparators)
-✅ Enumerations (enum class)
 
-What the app does
-You can:
-
-Add Book / Movie / Game
-List all items
-Search by title keyword
-Sort by title (asc/desc)
-Checkout / Return items
-Save/load to a CSV file
-input validation
-filtering
-date parsing and validation
-multithreading
 
 What the project does (exact behavior)
 You build a command-line application that manages a collection of media items:
@@ -46,42 +16,14 @@ All items share common fields:
 id (unique number)
 title (string)
 addedDate (Date type)
-status (Available / CheckedOut / Lost)
+status (enum - Available / CheckedOut / Lost)
 
 Each type adds its own extra fields:
 
 Book → author, pages
 Movie → director, minutes
-Game → platform (PC/PlayStation/Xbox/Switch)
+Game → platform (enum - PC/PlayStation/Xbox/Switch)
 
-
-Main features (what user can do in the app)
-1) Add items
-User chooses item type → enters data → item gets stored in memory.
-2) List all items
-Print every item in the library in a nice human-readable format.
-Example output:
-
-[Book] #12 "Clean Code" by Robert Martin (464 pages) | Added: 2026-05-18 | Status: Available
-
-3) Search by keyword (title)
-User enters a word like "code"
-You print all items whose title contains that keyword (case-insensitive).
-4) Sort items by title (asc/desc)
-User chooses ascending/descending
-You sort the whole collection.
-5) Checkout & Return
-
-Checkout: changes status from Available → CheckedOut
-Return: changes status from CheckedOut → Available
-If invalid (e.g., checkout already checked out), you throw an exception.
-
-6) Save & Load
-When exiting, save items to a file (e.g. CSV):
-
-On start, load existing file if available.
-
-So your program “remembers” items between runs.
 
 MediaVaultProject/
 ├── include/
@@ -133,7 +75,7 @@ title
 added date
 status
 
-Common behaviour:
+Common behaviour: polymorphism
 
 info() → display output
 serialize() → save to file
@@ -144,25 +86,20 @@ This class is abstract, so it is never created directly.
 Book
 Derived from Item.
 Extra fields:
-
 author
 pages
 
 Movie
 Derived from Item.
 Extra fields:
-
 director
 duration
 
 Game
 Derived from Item.
 Extra fields:
-
 platform
-
 Uses:
-
 Platform enum
 
 Library
@@ -183,9 +120,13 @@ save to file
 load from file
 
 Utils
+The Utils module contains reusable helper functions such as
+input validation and menu handling. Separating it from the core 
+logic helps follow the single responsibility principle,
+making the code cleaner and easier to maintain.
 Contains input and small UI helper functions.
-Responsibilities:
 
+Responsibilities:
 safe integer input
 safe string input
 menu choice input
@@ -215,19 +156,16 @@ leap year handling
 
 Important technical concepts this project already uses
 OOP
-
 encapsulation
 inheritance
 polymorphism
 abstract base classes
 
 Memory management
-
 std::unique_ptr
 ownership transfer with std::move
 
 STL
-
 std::vector
 std::find_if
 std::remove_if
@@ -235,46 +173,35 @@ std::sort
 
 Lambdas
 Used for:
-
 searching
 sorting
 filtering logic
 
 Exceptions
 Used for:
-
 invalid operations
 duplicate IDs
 not found errors
 invalid input
 
 File I/O
-
 std::ifstream
 std::ofstream
 serialization / deserialization
 
 Operator overloading
-
 operator<<
 Date::operator<
 
-Current menu scope
-Your application currently supports this menu flow:
+The project uses an abstract base class Item to represent 
+different media types, which enables polymorphism. 
+Derived classes like Book, Movie, and Game 
+implement specific behavior. The Library class acts as a manager 
+that stores and operates on these items using std::unique_ptr,
+ensuring safe memory management. I also separated utility functions
+into a Utils module to keep the main logic clean and maintainable.
 
-A → Add item
-R → Remove item
-S → Search item by ID
-T → Search item by title
-C → Checkout item
-U → Return item
-D → Display all items
-O → Sort items
-P → Print summary
-F → Filter items
-Q → Save and quit
-
-MediaVault is a C++17 CLI media manager for Books, Movies, and Games
-that supports add/search/filter/sort/checkout/save/load, 
-and is used to practice OOP, STL, exceptions, file I/O, 
-and a small multithreading feature.
+Item → abstract base class + polymorphism
+Library → manager / collection handler
+unique_ptr → safe ownership + no memory leaks
+Utils → separation of concerns

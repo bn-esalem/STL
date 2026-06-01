@@ -5,42 +5,52 @@
 #include <string>
 #include <iostream>
 
+using std::string;
+
 enum class Type { Book, Movie, Game};
 enum class Status { Available, CheckedOut, Lost}; 
 
 class Item{  // Abstract base class for all media items
 private:
     int m_id;
-    std::string m_title;
+    string m_title;
     Date m_added;
     Status m_status;
 
 public:
-    Item(int id, std::string title, const Date &added, Status status = Status::Available);
+    Item(int id, string title, const Date& added, Status status = Status::Available);
     
     int get_id() const;
-    const std::string& get_title() const;
-    // Return a const reference to the added date to avoid unnecessary copying
+    const string& get_title() const;
+    
+    // Return a const reference to avoid unnecessary copying
     const Date& get_added_date() const;
     
     Status get_status() const;
     void set_status(Status status);
 
     // Pure virtual functions for polymorphism
-    virtual std::string info() const = 0; // Pure virtual function for polymorphism
+    virtual string info() const = 0; // Pure virtual function to describe the object(display data)
     virtual Type get_type() const = 0; // Pure virtual function to get the type of item 
-    virtual std::string serialize() const = 0; //Pure virtual function for file saving
+    virtual string serialize() const = 0; //Pure virtual function for file saving
    
+    // Base class should have a virtual destructor so derived objects
+    // are destroyed correctly through base class pointers.
     virtual ~Item() = default;
 };
 
+// If the function needs one specific object, put it inside the class.
+// If the function is just a general helper, keep it outside.
+
 // Overload the << operator for easy printing of Item details
-std::ostream& operator<<(std::ostream& os, const Item &item);
+std::ostream& operator<<(std::ostream& os, const Item& item);
 
-// Helper functions to convert enums to strings for display purposes
-std::string status_to_string(Status status);
-Status status_from_string(const std::string &str);
+// Helper function to convert enums to strings for displaying and saving
+string status_to_string(Status status);
+// Helper function to convert string into a Status enum value for loading
+Status status_from_string(const string& str);
 
-std::string type_to_string(Type type);
+string type_to_string(Type type);
+Type type_from_string(const string& str);
 
 #endif

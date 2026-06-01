@@ -1,27 +1,35 @@
 #include "Item.h"
 #include <iostream>
 #include <string>
-#include <utility>
+#include <utility>  // for move
+#include <stdexcept>
 
-Item::Item(int id, std::string title, const Date &added, Status status)
-    : m_id(id), m_title(std::move(title)), m_added(added), m_status(status) {}
+/*Use std::move when:
+you own the object now
+you won’t use it again
+moving is cheaper than copying*/
+
+Item::Item(int id, string title, const Date &added, Status status)
+    : m_id(id), m_title(std::move(title)),
+     m_added(added), m_status(status) {}
 
 int Item::get_id() const {return m_id;}
 
-const std::string& Item::get_title() const {return m_title;}
+const string& Item::get_title() const {return m_title;}
 
 const Date& Item::get_added_date() const {return m_added;}
 
 Status Item::get_status() const {return m_status;}
 
-void Item::set_status(Status status) {this-> m_status = status;}
+void Item::set_status(Status status) {m_status = status;}
 
 std::ostream& operator<<(std::ostream& os, const Item &item) {
-    os << item.info(); // Assuming info() returns a string representation of the item
+    // Assuming info() returns a string representation of the item
+    os << item.info();
     return os;
 }
 
-std::string status_to_string(Status status) {
+string status_to_string(Status status) {
     switch (status) {
         case Status::Available:
             return "Available";
@@ -34,7 +42,7 @@ std::string status_to_string(Status status) {
     }
 }
 
-Status status_from_string(const std::string &str){
+Status status_from_string(const std::string& str){
 
     if(str == "Available"){
         return Status::Available;
@@ -49,7 +57,7 @@ Status status_from_string(const std::string &str){
     throw std::runtime_error("Unknown status: "+str);
 }
 
-std::string type_to_string(Type type) {
+string type_to_string(Type type) {
     switch (type) {
         case Type::Book:
             return "Book";
@@ -60,4 +68,18 @@ std::string type_to_string(Type type) {
         default:
             return "Unknown Type";
     }
+}
+
+Type type_from_string(const string& str){
+    if (str == "Book"){
+        return Type::Book;
+    }
+    else if (str == "Movie"){
+        return Type::Movie;
+    }
+    else if (str == "Game"){
+        return Type::Game;
+    }
+
+    throw std::runtime_error("Unknown type: " + str);
 }
