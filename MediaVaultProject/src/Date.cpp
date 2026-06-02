@@ -52,7 +52,7 @@ string Date::date_to_string() const{
 }
 
 // the opposite to take the string and convert it to Date object for easy loading from file or deserialize from text
-Date Date::date_from_string(const std::string &str){
+Date Date::date_from_string(const string& str){
 
     std::istringstream iss(str);
     int year{}, month{}, day{};

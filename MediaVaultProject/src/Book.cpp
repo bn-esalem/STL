@@ -5,13 +5,11 @@
 #include <string>
 #include <utility>  // For std::move
 
-Book::Book(int id, std::string title, const Date &added, std::string author, int pages)
+Book::Book(int id, string title, const Date& added, string author, int pages)
     : Item(id, std::move(title), added), m_author(std::move(author)), m_pages(pages) {}
 
-std::string Book::info() const {
-    
+string Book::info() const {    
     std::ostringstream oss;
-
     oss << "[Book]\n" 
         << "ID: " << get_id()
         << "\nTitle: \"" << get_title() << "\""
@@ -19,7 +17,6 @@ std::string Book::info() const {
         << "\nStatus: " << status_to_string(get_status())
         << "\nAuthor: " << m_author
         << "\nPages: " << m_pages;
-
     return oss.str();
 }
 
@@ -27,17 +24,14 @@ Type Book::get_type() const {
     return Type::Book;
 }
 
-std::string Book::serialize() const{
-    
-    std::ostringstream oss;
-    
+string Book::serialize() const{    
+    std::ostringstream oss;    
     oss << "Book,"
         << get_id() << ","
         << get_title() << ","
         << get_added_date().date_to_string() << ","
         << status_to_string(get_status()) << ","
         << m_author << ","
-        << m_pages;
-    
+        << m_pages;    
     return oss.str();
 }

@@ -5,7 +5,7 @@
 
 #include <algorithm>
 #include <iostream>
-#include <string>  // for to_string()
+#include <string>  // for to_string(...) & std::stoi(...)
 #include <utility>
 #include <fstream>
 #include <vector>
@@ -264,7 +264,10 @@ void Library::load_from_file(const string& file_name){
     m_items.clear();
 
     string line;
+    int line_number{0};
     while(std::getline(in_file, line)){
+        ++line_number;
+        
         if(line.empty()){continue;}
 
         std::vector<std::string> fields = split_csv_line(line);
@@ -275,58 +278,80 @@ void Library::load_from_file(const string& file_name){
             type = type_from_string(fields[0]);
         }
         catch (const std::exception&) {
-            throw LibraryError("Unknown item type in file: " + fields[0]);
-        }
+            throw LibraryError("Unknown item type at line " +
+                std::to_string(line_number) + ": " + fields[0]);
 
+        }
         switch(type){
             case Type::Book:{
                 if (fields.size() != 7) {
-                    throw LibraryError("Invalid Book record: " + line);
+                    throw LibraryError("Invalid Book record at line " +
+                            std::to_string(line_number) + ": " + line);
                 }
+                try{
+                    int id = std::stoi(fields[1]);
+                    string title = fields[2];
+                    Date added = Date::date_from_string(fields[3]);
+                    Status status = status_from_string(fields[4]);
+                    string author = fields[5];
+                    int pages = std::stoi(fields[6]);
 
-                int id = std::stoi(fields[1]);
-                std::string title = fields[2];
-                Date added = Date::date_from_string(fields[3]);
-                Status status = status_from_string(fields[4]);
-                std::string author = fields[5];
-                int pages = std::stoi(fields[6]);
-
-                auto book = std::make_unique<Book>(id, title, added, author, pages);
-                book->set_status(status);
-                m_items.push_back(std::move(book));
+                    auto book = std::make_unique<Book>(id, title, added, author, pages);
+                    book->set_status(status);
+                    m_items.push_back(std::move(book));
+                }
+                catch(const std::exception& e){
+                    throw LibraryError("Invalid Book record at line " +
+                        std::to_string(line_number) + ": " + line 
+                        + " | Reason: " + e.what());
+                }
                 break;
             }
             case Type::Movie: {
                 if (fields.size() != 7) {
-                    throw LibraryError("Invalid Movie record: " + line);
+                    throw LibraryError("Invalid Movie record at line " + 
+                        std::to_string(line_number) + ": " + line);
                 }
+                try{
+                    int id = std::stoi(fields[1]);
+                    string title = fields[2];
+                    Date added = Date::date_from_string(fields[3]);
+                    Status status = status_from_string(fields[4]);
+                    string director = fields[5];
+                    int duration = std::stoi(fields[6]);
 
-                int id = std::stoi(fields[1]);
-                std::string title = fields[2];
-                Date added = Date::date_from_string(fields[3]);
-                Status status = status_from_string(fields[4]);
-                std::string director = fields[5];
-                int duration = std::stoi(fields[6]);
-
-                auto movie = std::make_unique<Movie>(id, title, added, director, duration);
-                movie->set_status(status);
-                m_items.push_back(std::move(movie));
+                    auto movie = std::make_unique<Movie>(id, title, added, director, duration);
+                    movie->set_status(status);
+                    m_items.push_back(std::move(movie));
+                }
+                catch(const std::exception& e){
+                    throw LibraryError("Invalid Movie record at line " +
+                        std::to_string(line_number) + ": " + line 
+                        + " | Reason: " + e.what());
+                }
                 break;
             }
             case Type::Game: {
                 if (fields.size() != 6) {
-                    throw LibraryError("Invalid Game record: " + line);
+                    throw LibraryError("Invalid Game record at line " + 
+                        std::to_string(line_number) + ": " + line);
                 }
+                try{
+                    int id = std::stoi(fields[1]);
+                    string title = fields[2];
+                    Date added = Date::date_from_string(fields[3]);
+                    Status status = status_from_string(fields[4]);
+                    Platform platform = platform_from_string(fields[5]);
 
-                int id = std::stoi(fields[1]);
-                std::string title = fields[2];
-                Date added = Date::date_from_string(fields[3]);
-                Status status = status_from_string(fields[4]);
-                Platform platform = platform_from_string(fields[5]);
-
-                auto game = std::make_unique<Game>(id, title, added, platform);
-                game->set_status(status);
-                m_items.push_back(std::move(game));
+                    auto game = std::make_unique<Game>(id, title, added, platform);
+                    game->set_status(status);
+                    m_items.push_back(std::move(game));
+                }
+                catch(const std::exception& e){
+                    throw LibraryError("Invalid Game record at line " +
+                        std::to_string(line_number) + ": " + line 
+                        + " | Reason: " + e.what());
+                }
                 break;
             }
         }
@@ -338,7 +363,6 @@ void Library::print_summary() const{
         std::cout << "Library is empty.\n";
         return;
     }
-
     size_t books{0};
     size_t movies{0};
     size_t games{0};
@@ -347,8 +371,7 @@ void Library::print_summary() const{
     size_t checked_out{0};
     size_t lost{0};
 
-    for (const auto& item: m_items){
-        
+    for (const auto& item: m_items){        
         switch(item->get_type()){
             case Type::Book:
                 ++books;
@@ -372,7 +395,6 @@ void Library::print_summary() const{
                 break;   
         }
     }
-
     std::cout << "\nLibrary Summary\n";
     std::cout << "--------------------\n";
     std::cout << "Total items: " << m_items.size() << "\n";

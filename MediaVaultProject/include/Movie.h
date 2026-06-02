@@ -5,17 +5,18 @@
 #include <string>
 #include <iostream>
 
+using std::string;
 
 class Movie : public Item {
 private:
-    std::string m_director;
+    string m_director;
     int m_duration; // Duration in minutes
 public:
-    Movie(int id, std::string title, const Date &added, std::string director, int duration);
+    Movie(int id, string title, const Date& added, string director, int duration);
     
-    std::string info() const override;
+    string info() const override;
     Type get_type() const override;
-    std::string serialize() const override;
+    string serialize() const override;
 };
 
 #endif

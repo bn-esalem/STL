@@ -17,25 +17,29 @@
 int main(){
     
     Library library;
-    std::mutex library_mutex; // will later protect access to the shared library
-    std::mutex cout_mutex;
-    // thread-safe flag to tell background thread: keep running{true}/stop{false}
+
+    std::mutex library_mutex; // prevents simultanious access to the shared library
+    std::mutex cout_mutex; // prevents messy console output(std::cout)
+    // control background thread: keep running{true}/stop{false}
     std::atomic<bool> autosave_running{true};
     
     try{
         library.load_from_file("data/MediaVault.txt");
     }
     catch (const std::exception &e){
-        std::cerr << "Error loading file: " << e.what() << "\n";
+        std::cerr << "Error loading file (MediaVault.txt): " 
+                  << e.what() << "\n";
     }
 
-    // the thread can use library, library_mutex and autosave_running
+    // the thread can use library, library_mutex, cout_mutex and autosave_running
     std::thread autosave_thread([&](){
+        // to allow to write (1s) instead of std::chrono::second(1)
         using namespace std::chrono_literals;
 
+        constexpr int AUTOSAVE_INTERVAL_SECONDS = 10;
         while(autosave_running){
             // wait about 10 s, but check every 1 s if we should stop
-            for (int i{0}; i < 10 && autosave_running; ++i){
+            for (int i{0}; i < AUTOSAVE_INTERVAL_SECONDS && autosave_running; ++i){
                 std::this_thread::sleep_for(1s); // because of chrono_literals
             }
             if (!autosave_running){
@@ -132,32 +136,46 @@ int main(){
                     break;
                 }
                 case('S'): {
-                    int search_id = get_int_input("Enter the ID of the item to search: ");
-                    {
-                        std::lock_guard<std::mutex> lock(library_mutex);
-                        if (!library_not_empty(library)){
+                    display_search_menu();
+                    int search_choice = get_int_input("Choose searching option: ");
+                    
+                    switch(search_choice){
+                        case 1:{
+                            int search_id = get_int_input("Enter the ID of the item to search: ");
+                            
+                            std::lock_guard<std::mutex> lib_lock(library_mutex);
+                            if(!library_not_empty(library)){
+                                break;
+                            }
+
+                            const Item* item = library.find_item(search_id);
+                            if (item) {
+                                std::lock_guard<std::mutex> out_lock(cout_mutex);
+                                std::cout << "\nItem found:\n" << *item << "\n";
+                            }
+                            else {
+                                std::lock_guard<std::mutex> out_lock(cout_mutex);
+                                std::cout << "Item with ID " << search_id << " not found.\n";
+                            }
                             break;
                         }
-                        const Item* item = library.find_item(search_id);
-                        if (item) {
-                            std::lock_guard<std::mutex> lock(cout_mutex);
-                            std::cout << "\nItem found:\n" << *item << "\n";
-                        }
-                        else {
-                            std::lock_guard<std::mutex> lock(cout_mutex);
-                            std::cout << "Item with ID " << search_id << " not found.\n";
-                        }
-                    }
-                    break;
-                }
-                case('T'):{
-                    std::string keyword = get_string_input("Enter the Title keyword: ");
-                    {
-                        std::lock_guard<std::mutex> lock(library_mutex);
-                        if (!library_not_empty(library)){
+                        case 2:{
+                            std::string keyword = get_string_input("Enter the Title keyword: ");                       
+                            
+                            std::lock_guard<std::mutex> lib_lock(library_mutex);
+                            if(!library_not_empty(library)){
+                                break;
+                            }
+                            
+                            library.search_by_title(keyword);
                             break;
-                        }                       
-                        library.search_by_title(keyword);
+                        }
+
+                        default:{
+                            std::lock_guard<std::mutex> cout_lock(cout_mutex);
+                            std::cout << "Invalid search option.\n";
+                            break;
+                        }
                     }
                     break;
                 }

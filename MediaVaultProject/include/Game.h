@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+using std::string;
+
 enum class Platform {
     PC,
     PlayStation,
@@ -14,19 +16,19 @@ enum class Platform {
 };
 
 //helper function to convert Platform enum to string for display purposes
-std::string platform_to_string(Platform platform);
-Platform platform_from_string(const std::string &str);
+string platform_to_string(Platform platform);
+Platform platform_from_string(const string& str);
 
 class Game : public Item {
 private:
     Platform m_platform;
     
 public:
-    Game(int id, std::string title, const Date &added, Platform platform);
+    Game(int id, string title, const Date& added, Platform platform);
 
-    std::string info() const override;
+    string info() const override;
     Type get_type() const override;
-    std::string serialize() const override;
+    string serialize() const override;
 };
 
 #endif

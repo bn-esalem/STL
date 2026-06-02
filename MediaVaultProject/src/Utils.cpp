@@ -1,53 +1,73 @@
 #include "Utils.h"
 #include "Library.h"
 
-#include <limits>
 #include <iostream>
+#include <sstream>
 #include <cctype>
 #include <stdexcept>
 
-char get_menu_choice(const std::string& prompt) {
+void display_menu(){
+    std::cout << "\nMedia Vault Menu:\n";
+    std::cout << "----------------------------\n";
+    std::cout << "A. Add Item (Book / Movie / Game)\n";
+    std::cout << "R. Remove Item\n";
+    std::cout << "S. Search Item\n";
+    std::cout << "C. Checkout Item\n";
+    std::cout << "U. Return Item\n";
+    std::cout << "D. Display All Items\n";
+    std::cout << "O. Sort Items\n";
+    std::cout << "P. Print summary\n";
+    std::cout << "F. Filter Items\n";
+    std::cout << "Q. Quit\n";
+    std::cout << "----------------------------\n";
+}
+
+char get_menu_choice(const string& prompt) {
     while (true) {
-        std::string line;
+        string line;
         std::cout << prompt;
 
+        //std::ws to remove leading whitespace before reading(\n \t " ")
         if (!std::getline(std::cin >> std::ws, line)) {
             throw std::runtime_error("Input stream closed (EOF).");
         }
-        if (!line.empty()) {
-            unsigned char c = static_cast<unsigned char>(line[0]);
-            return static_cast<char>(std::toupper(c)); // Convert to uppercase for case-insensitive comparison
+        if (line.empty()) {
+            std::cout << "Input cannot be empty. Please try again.\n";            
         }
-        
-        std::cout << "Input cannot be empty. Please try again.\n";
-            
+        if (line.size() != 1){
+            std::cout << "Please enter exactly one character.\n";
+            continue;
+        }
+        unsigned char c = static_cast<unsigned char>(line[0]);
+        return static_cast<char>(std::toupper(c)); // Convert to uppercase for case-insensitive comparison                   
     }
 }
 
-int get_int_input(const std::string& prompt) {
-    
-    int value{};
+int get_int_input(const string& prompt) {    
     while (true){
-        
+        string line;        
         std::cout << prompt;
-        if (std::cin >> value) {
-            return value; // Valid integer input
-        } else {
-            std::cout << "Invalid input. Please enter a valid integer.\n";
-            std::cin.clear(); // Clear the error state
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-        }
+        
+        if (!std::getline(std::cin >> std::ws, line)) {
+            throw std::runtime_error("Input stream closed (EOF).");
+        }         
+        std::stringstream ss(line);
+        int value{};
+        char extra;
+
+        if ((ss >> value) && !(ss >> extra)){
+            return value;
+        } 
+        std::cout << "Invalid input. Please enter a valid integer.\n";
     }
 }
 
-std::string get_string_input(const std::string& prompt) {
+string get_string_input(const string& prompt) {    
     
-    std::string value;
     while (true)
     {
-        std::cout << prompt;
-        //std::getline(std::cin >> std::ws, value); // Read a line of input
-        
+        string value;
+        std::cout << prompt;        
         if(!std::getline(std::cin >> std::ws, value)) {
             throw std::runtime_error("Input stream closed (EOF).");
         }
@@ -59,16 +79,26 @@ std::string get_string_input(const std::string& prompt) {
     }
 }
 
-Platform get_platform_input() {
+Date read_date_input() {
+    while (true){
+        string input_date = get_string_input("Added date (YYYY-MM-DD): ");
+        try{
+            return Date::date_from_string(input_date);
+        }
+        catch (const std::exception &e){
+            std::cout << e.what() << "\n";
+        }
+    }
+}
 
+Platform get_platform_input() {
     while(true){
         std::cout << "Choose platform:\n"
                   << "1. PC\n"
                   << "2. PlayStation\n"
                   << "3. Xbox\n"
                   << "4. Nintendo Switch\n"
-                  << "5. Mobile\n";
-    
+                  << "5. Mobile\n";   
         int platform_choice = get_int_input("Platform: ");
         switch (platform_choice) {
             case 1: return Platform::PC;
@@ -82,35 +112,11 @@ Platform get_platform_input() {
     }
 }
 
-Date read_date_input() {
-
-    while (true){
-        std::string input_date = get_string_input("Added date (YYYY-MM-DD): ");
-
-        try{
-            return Date::date_from_string(input_date);
-        }
-        catch (const std::exception &e){
-            std::cout << e.what() << "\n";
-        }
-    }
-}
-
-void display_menu() {
-    std::cout << "\nMedia Vault Menu:\n";
+void display_search_menu(){
+    std::cout << "\nSearch Options:\n";
     std::cout << "----------------------------\n";
-    std::cout << "A. Add Item (Book / Movie / Game)\n";
-    std::cout << "R. Remove Item\n";
-    std::cout << "S. Search Item by ID\n";
-    std::cout << "T. Search Item by Title\n";
-    std::cout << "C. Checkout Item\n";
-    std::cout << "U. Return Item\n";
-    std::cout << "D. Display All Items\n";
-    std::cout << "O. Sort Items\n";
-    std::cout << "P. Print summary\n";
-    std::cout << "F. Filter Items\n";
-    std::cout << "Q. Quit\n";
-    std::cout << "----------------------------\n";
+    std::cout << "1. Search by ID\n";
+    std::cout << "2. Search by Title\n"; 
 }
 
 void display_sort_menu() {
@@ -137,7 +143,7 @@ void display_filter_menu(){
     std::cout << "6. Show Games\n";  
 }
 
-bool library_not_empty(const Library &library){
+bool library_not_empty(const Library& library){
     if (library.empty()){
         std::cout << "Library is empty.\n";
         return false;
@@ -145,7 +151,7 @@ bool library_not_empty(const Library &library){
     return true;
 }
 
-void print_section_header(const std::string &title){
+void print_section_header(const string& title){
     std::cout << "\n" << title << "\n";
     std::cout << "----------------------------\n";
 }

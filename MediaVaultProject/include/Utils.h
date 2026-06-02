@@ -7,17 +7,23 @@
 
 #include <string>
 
+using std::string;
 class Library;
 
-char get_menu_choice(const std::string& prompt);
-int get_int_input(const std::string& prompt);
-std::string get_string_input(const std::string& prompt);
-Platform get_platform_input();
-Date read_date_input();
 void display_menu();
+char get_menu_choice(const string& prompt);
+
+int get_int_input(const string& prompt);
+string get_string_input(const string& prompt);
+Date read_date_input();
+Platform get_platform_input();
+
+void display_search_menu();
 void display_sort_menu();
 void display_filter_menu();
-bool library_not_empty(const Library &library);
-void print_section_header(const std::string &title);
+
+bool library_not_empty(const Library& library);
+
+void print_section_header(const string& title);
 
 #endif

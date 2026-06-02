@@ -23,7 +23,7 @@ public:
     int get_year() const;
 
     string date_to_string() const;
-    static Date date_from_string(const std::string &str);
+    static Date date_from_string(const string& str);
 
     bool operator==(const Date &rhs) const;
     bool operator<(const Date &rhs) const; // used for sorting by date (ascending or descending)

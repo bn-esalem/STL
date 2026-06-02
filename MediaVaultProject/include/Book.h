@@ -5,17 +5,19 @@
 #include<iostream>
 #include <string>
 
+using std::string;
+
 class Book: public Item
 {
 private:
-    std::string m_author;
+    string m_author;
     int m_pages;
 public:
-    Book(int id, std::string title, const Date &added, std::string author, int pages);
+    Book(int id, string title, const Date& added, string author, int pages);
 
-    std::string info() const override;
+    string info() const override;
     Type get_type() const override;
-    std::string serialize() const override;
+    string serialize() const override;
 };
 
 #endif
