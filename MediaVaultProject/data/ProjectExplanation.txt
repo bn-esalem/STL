@@ -1,0 +1,46 @@
+2-minute project explanation
+__________________________________
+
+I built a C++17 command-line application called MediaVault, 
+which manages a collection of different media types: Books, 
+Movies, and Games.
+The main goal of the project was to practice important C++ concepts
+in one realistic application instead of only small isolated exercises.
+The design is based on an abstract base class called Item, 
+which contains the common fields such as ID, title, added date, 
+and status. Then I created derived classes for Book, Movie, 
+and Game, each with their own specific data, such as author and pages
+for books, director and duration for movies, and platform for games.
+The central manager class is Library, which stores all items 
+in a std::vector<std::unique_ptr<Item>>. This allows me to use 
+polymorphism and manage different derived objects through the same
+base type while keeping ownership safe with smart pointers.
+The application supports adding, removing, searching by ID and title,
+sorting by title, ID, and date, filtering by type and status, 
+as well as checkout and return operations.
+I also implemented save and load functionality using a CSV-style text
+format. For that, each derived class provides its own serialize() 
+method, and the library can rebuild the correct object type from the
+saved data.
+Another feature I added is a small autosave background thread, 
+where I used std::thread, std::mutex, and std::atomic<bool> 
+to practice safe multithreading and thread shutdown.
+Overall, this project helped me connect OOP, STL, exception handling,
+file I/O, and multithreading in one practical application.
+
+Shorter version (about 45–60 seconds)
+
+MediaVault is a C++17 CLI application I built to manage Books, 
+Movies, and Games.
+It uses an abstract base class Item with derived classes 
+for each media type, and a Library manager class that 
+stores all items in a std::vector<std::unique_ptr<Item>>, 
+which let me practice polymorphism and safe ownership with 
+smart pointers.
+The project supports add, remove, search, sort, filter, 
+checkout/return, summary statistics, and file persistence with 
+save/load.
+I also added an autosave thread to practice multithreading 
+with mutexes and atomic flags.
+The project helped me combine OOP, STL, exceptions, file I/O, 
+and synchronization in one realistic program.
