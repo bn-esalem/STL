@@ -14,6 +14,11 @@ private:
     // Using smart pointers to manage Item objects and ensure proper memory management
     std::vector<std::unique_ptr<Item>> m_items; // Library own a collection of items
 public:
+    
+    bool empty() const;
+
+    std::size_t size() const;
+
     void add_item(std::unique_ptr<Item> item);
     void remove_item(int id);
     
@@ -25,24 +30,19 @@ public:
     void checkout_item(int id);
     void return_item(int id);
 
-    void list_all_items() const;
-
-    bool empty() const;
-
     void sort_by_title(bool ascending = true);
     void sort_by_title_case_insensitive(bool ascending = true);
     void sort_by_id(bool ascending = true);
     void sort_by_date(bool ascending = true);
 
-    std::size_t size() const;
+    void filter_by_status(Status status) const;
+    void filter_by_type(Type type) const;
 
     void save_to_file(const string& file_name) const; // before quitting
     void load_from_file(const string& file_name); // at program start
 
     void print_summary() const;
-
-    void filter_by_status(Status status) const;
-    void filter_by_type(Type type) const;
+    void list_all_items() const;
 };
 
 #endif

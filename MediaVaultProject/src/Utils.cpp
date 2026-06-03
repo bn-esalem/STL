@@ -14,10 +14,10 @@ void display_menu(){
     std::cout << "S. Search Item\n";
     std::cout << "C. Checkout Item\n";
     std::cout << "U. Return Item\n";
-    std::cout << "D. Display All Items\n";
     std::cout << "O. Sort Items\n";
-    std::cout << "P. Print summary\n";
     std::cout << "F. Filter Items\n";
+    std::cout << "P. Print summary\n";
+    std::cout << "D. Display All Items\n";
     std::cout << "Q. Quit\n";
     std::cout << "----------------------------\n";
 }
@@ -112,6 +112,14 @@ Platform get_platform_input() {
     }
 }
 
+bool library_not_empty(const Library& library){
+    if (library.empty()){
+        std::cout << "Library is empty.\n";
+        return false;
+    }
+    return true;
+}
+
 void display_search_menu(){
     std::cout << "\nSearch Options:\n";
     std::cout << "----------------------------\n";
@@ -141,14 +149,6 @@ void display_filter_menu(){
     std::cout << "4. Show Books\n";
     std::cout << "5. Show Movies\n";
     std::cout << "6. Show Games\n";  
-}
-
-bool library_not_empty(const Library& library){
-    if (library.empty()){
-        std::cout << "Library is empty.\n";
-        return false;
-    }
-    return true;
 }
 
 void print_section_header(const string& title){

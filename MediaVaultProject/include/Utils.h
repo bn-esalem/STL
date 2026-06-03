@@ -18,11 +18,11 @@ string get_string_input(const string& prompt);
 Date read_date_input();
 Platform get_platform_input();
 
+bool library_not_empty(const Library& library);
+
 void display_search_menu();
 void display_sort_menu();
 void display_filter_menu();
-
-bool library_not_empty(const Library& library);
 
 void print_section_header(const string& title);
 

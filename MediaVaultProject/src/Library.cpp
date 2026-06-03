@@ -21,6 +21,14 @@ static string string_to_lower(string str){
     return str;
 }
 
+bool Library::empty() const{
+    return m_items.empty();
+}
+
+std::size_t Library::size() const{
+    return m_items.size();
+}
+
 /*find_item() returns Item* because a pointer can represent 
 two possibilities:
 a valid found object
@@ -57,6 +65,27 @@ const Item* Library::find_item(int id) const {
     }
 }
 
+void Library::search_by_title(const string& keyword) const{
+
+    if (keyword.empty()){
+        std::cout << "Keyword is empty!\n";
+        return;
+    }   
+    const string lower_keyword = string_to_lower(keyword);
+    bool found = false;
+
+    for (const auto& item: m_items){
+        const string lower_title = string_to_lower(item->get_title());
+        if (lower_title.find(lower_keyword) != string::npos){
+            std::cout << *item << std::endl;
+            found = true;
+        }
+    }
+    if (!found){
+        std::cout << "No matches. \n";
+    } 
+}
+
 void Library::add_item(std::unique_ptr<Item> item) {
     if (!item) {
         throw LibraryError("Cannot add a null item to the library.");
@@ -67,10 +96,6 @@ void Library::add_item(std::unique_ptr<Item> item) {
     }
 
     m_items.push_back(std::move(item)); // unique_ptr can't be copied
-}
-
-std::size_t Library::size() const{
-    return m_items.size();
 }
 
 void Library::remove_item(int id) {
@@ -94,32 +119,8 @@ erase(it, end) removes the ??? part. */
     }
 }
 
-void Library::search_by_title(const string& keyword) const{
-
-    if (keyword.empty()){
-        std::cout << "Keyword is empty!\n";
-        return;
-    }
-    
-    const string lower_keyword = string_to_lower(keyword);
-    bool found = false;
-
-    for (const auto& item: m_items){
-        const string lower_title = string_to_lower(item->get_title());
-        if (lower_title.find(lower_keyword) != string::npos){
-            std::cout << *item << std::endl;
-            found = true;
-        }
-    }
-
-    if (!found){
-        std::cout << "No matches. \n";
-    } 
-}
-
 void Library::checkout_item(int id){
     Item *item = find_item(id);
-
     if (!item){
         throw NotFoundError("Item with ID: " + std::to_string(id) + " not found.");
     }
@@ -141,26 +142,11 @@ void Library::return_item(int id){
     item->set_status(Status::Available);
 }
 
-bool Library::empty() const{
-    return m_items.empty();
-}
-
-void Library::list_all_items() const {
-    if (m_items.empty()) {
-        std::cout << "No items in the library.\n";
-        return;
-    }
-    for (const auto& item : m_items) {
-        std::cout << *item << "\n"; // Using overloaded operator<< for Item
-        std::cout << "-----------------------\n";
-    }
-}
-
 void Library::sort_by_title(bool ascending){
     std::sort(m_items.begin(), m_items.end(),
     [ascending](const std::unique_ptr<Item>& a, 
                 const std::unique_ptr<Item>& b){
-    return ascending ? (a->get_title() < b->get_title()) 
+    return ascending ? (a->get_title() < b->get_title()) // ascending 1->2->3
                      : (a->get_title() > b->get_title());
     });
 }
@@ -404,6 +390,17 @@ void Library::print_summary() const{
     std::cout << "Available: " << available << "\n";
     std::cout << "CheckedOut: " << checked_out << "\n";
     std::cout << "Lost: " << lost << "\n";
+}
+
+void Library::list_all_items() const {
+    if (m_items.empty()) {
+        std::cout << "No items in the library.\n";
+        return;
+    }
+    for (const auto& item : m_items) {
+        std::cout << *item << "\n"; // Using overloaded operator<< for Item
+        std::cout << "-----------------------\n";
+    }
 }
 
 
