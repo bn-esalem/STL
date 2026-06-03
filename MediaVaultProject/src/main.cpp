@@ -20,7 +20,7 @@ int main(){
     
     Library library;
 
-    std::mutex library_mutex; // prevents simultanious access to the shared library
+    std::mutex library_mutex; // prevents simultaneous access to the shared library
     std::mutex cout_mutex; // prevents messy console output(std::cout)
     // control background thread: keep running{true}/stop{false}
     std::atomic<bool> autosave_running{true};
@@ -37,7 +37,7 @@ int main(){
     std::thread autosave_thread([&](){
         // to allow to write (1s) instead of std::chrono::second(1)
         using namespace std::chrono_literals;
-        // (constexper) means value is known at compile time 
+        // (constexpr) means value is known at compile time 
         constexpr int AUTOSAVE_INTERVAL_SECONDS = 10;
         while(autosave_running){
             // wait about 10 s, but check every 1 s if we should stop
@@ -76,12 +76,12 @@ int main(){
                     }
                     int id = get_int_input("ID: ");
                     string title = get_string_input("Title: ");
-                    Date added = read_date_input();
+                    Date added_date = read_date_input();
                     
                     if (type_choice == 'B'){
                         string author = get_string_input("Author: ");
                         int pages = get_int_input("Pages: ");
-                        auto book = std::make_unique<Book>(id, title, added, author, pages);
+                        auto book = std::make_unique<Book>(id, title, added_date, author, pages);
                         {
                             std::lock_guard<std::mutex> lib_lock(library_mutex);
                             library.add_item(std::move(book));
@@ -94,7 +94,7 @@ int main(){
                     else if (type_choice == 'M'){
                         string director = get_string_input("Director: ");
                         int duration = get_int_input("Duration: ");
-                        auto movie = std::make_unique<Movie>(id, title, added, director, duration);
+                        auto movie = std::make_unique<Movie>(id, title, added_date, director, duration);
                         {
                             std::lock_guard<std::mutex> lib_lock(library_mutex);
                             library.add_item(std::move(movie));
@@ -106,7 +106,7 @@ int main(){
                     }
                     else if (type_choice == 'G'){
                         Platform platform = get_platform_input();
-                        auto game = std::make_unique<Game>(id, title, added, platform);
+                        auto game = std::make_unique<Game>(id, title, added_date, platform);
                         {
                             std::lock_guard<std::mutex> lib_lock(library_mutex);
                             library.add_item(std::move(game));
@@ -118,7 +118,7 @@ int main(){
                     }
                     break; // break case 'A'
                 }
-                //Remove an i tem
+                //Remove an item
                 case('R'): {
                     {
                         std::lock_guard<std::mutex> lib_lock(library_mutex);
