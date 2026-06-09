@@ -244,7 +244,7 @@ static std::vector<string> split_csv_line(const string& line){
 
 void Library::load_from_file(const string& file_name){
     
-    std::ifstream in_file(file_name);
+    std::ifstream in_file(file_name); // to read data from a file
     if (!in_file){return;}
     
     m_items.clear();
@@ -271,18 +271,19 @@ void Library::load_from_file(const string& file_name){
         switch(type){
             case Type::Book:{
                 if (fields.size() != 7) {
+                    // missing field, extra field, wrong #of commas
                     throw LibraryError("Invalid Book record at line " +
                             std::to_string(line_number) + ": " + line);
                 }
                 try{
                     int id = std::stoi(fields[1]);
                     string title = fields[2];
-                    Date added = Date::date_from_string(fields[3]);
+                    Date added_date = Date::date_from_string(fields[3]);
                     Status status = status_from_string(fields[4]);
                     string author = fields[5];
                     int pages = std::stoi(fields[6]);
 
-                    auto book = std::make_unique<Book>(id, title, added, author, pages);
+                    auto book = std::make_unique<Book>(id, title, added_date, author, pages);
                     book->set_status(status);
                     m_items.push_back(std::move(book));
                 }
@@ -301,12 +302,12 @@ void Library::load_from_file(const string& file_name){
                 try{
                     int id = std::stoi(fields[1]);
                     string title = fields[2];
-                    Date added = Date::date_from_string(fields[3]);
+                    Date added_date = Date::date_from_string(fields[3]);
                     Status status = status_from_string(fields[4]);
                     string director = fields[5];
                     int duration = std::stoi(fields[6]);
 
-                    auto movie = std::make_unique<Movie>(id, title, added, director, duration);
+                    auto movie = std::make_unique<Movie>(id, title, added_date, director, duration);
                     movie->set_status(status);
                     m_items.push_back(std::move(movie));
                 }
@@ -325,11 +326,11 @@ void Library::load_from_file(const string& file_name){
                 try{
                     int id = std::stoi(fields[1]);
                     string title = fields[2];
-                    Date added = Date::date_from_string(fields[3]);
+                    Date added_date = Date::date_from_string(fields[3]);
                     Status status = status_from_string(fields[4]);
                     Platform platform = platform_from_string(fields[5]);
 
-                    auto game = std::make_unique<Game>(id, title, added, platform);
+                    auto game = std::make_unique<Game>(id, title, added_date, platform);
                     game->set_status(status);
                     m_items.push_back(std::move(game));
                 }
